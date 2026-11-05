@@ -157,6 +157,6 @@ contexts.
 
 Working prototype: all ten sections, the automatic overview, studio
 view, and the generated study run against the live API. Outstanding:
-on-device photo checks on the owner's wall painting (iPhone first, then
-iPad/Windows layouts), early Quest browser feasibility per the plan,
+on-device photo checks of a real painting (iPhone first, then
+iPad/Windows layouts), an early Quest browser feasibility test,
 and a final product rename.
