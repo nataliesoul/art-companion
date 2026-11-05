@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="680" viewBox="0 0 900 680">
+  <title>Practice composition: a geometric still life</title>
+  <rect width="900" height="680" fill="#8c8279"/>
+  <rect x="60" y="45" width="780" height="590" rx="2" fill="#f3e6ce"/>
+  <path d="M60 440H840V635H60Z" fill="#c5aa91"/>
+  <ellipse cx="452" cy="522" rx="260" ry="36" fill="#a38c76"/>
+  <path d="M303 262H465L491 479Q491 527 385 527Q278 527 278 479Z" fill="#657d72"/>
+  <ellipse cx="384" cy="262" rx="81" ry="22" fill="#405e54"/>
+  <path d="M307 289Q336 315 337 489" fill="none" stroke="#91a496" stroke-width="18"/>
+  <path d="M384 262Q371 161 475 113M386 261Q394 158 332 101" fill="none" stroke="#6b7152" stroke-width="7"/>
+  <path d="M421 165Q419 100 475 113Q485 159 421 165M369 167Q300 169 309 122Q361 112 369 167" fill="#8c9367"/>
+  <circle cx="566" cy="483" r="54" fill="#b65c46"/>
+  <path d="M566 430L574 411" stroke="#6b7152" stroke-width="6"/>
+  <circle cx="654" cy="496" r="38" fill="#d5ae60"/>
+  <text x="85" y="604" font-family="sans-serif" font-size="13" letter-spacing="3" fill="#594c43">PRACTICE COMPOSITION</text>
+</svg>

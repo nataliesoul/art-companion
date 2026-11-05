@@ -1,0 +1,26 @@
+# Dependencies and build output
+node_modules/
+dist/
+.next/
+
+# Secrets: the Meta Model API key lives only in .env (see .env.example)
+.env
+.env.*
+!.env.example
+
+# Local assistant briefs and tooling (not part of the app)
+*-PROMPT.md
+AGENTS.md
+.claude/
+Start-Muse.cmd
+
+# Private artwork photos, reference boards and design screenshots
+Samples/
+References/
+artwork-private/
+studio-*.jpg
+
+# OS and logs
+*.log
+.DS_Store
+Thumbs.db

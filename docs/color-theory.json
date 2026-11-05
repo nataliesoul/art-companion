@@ -1,0 +1,166 @@
+{
+  "meta": {
+    "title": "Color theory reference for future AI critique",
+    "version": 1,
+    "purpose": "Grounding knowledge for the later milestone where a model API gives feedback on request. The future backend can load this file into the critique prompt so color comments stay consistent with what the app measures.",
+    "note": "All descriptions are original summaries of long-established concepts, not quotations."
+  },
+  "measured": {
+    "description": "What the app already computes. Future AI comments about color must start from this measured data, never from a fresh guess about the photo.",
+    "palette": {
+      "method": [
+        "Counts real pixels of the loaded photo inside the marked quad when four corners exist, otherwise the whole photo.",
+        "Downsampled to at most 96 px on the long side; transparent pixels skipped.",
+        "RGB quantized to 5 bits per channel; bins averaged.",
+        "Near-duplicates merged (Euclidean RGB distance below 40); top 6 kept."
+      ],
+      "entry": {
+        "hex": "#rrggbb of the averaged bin",
+        "r": "red 0-255",
+        "g": "green 0-255",
+        "b": "blue 0-255",
+        "coverage": "share of counted pixels, 0-1"
+      }
+    },
+    "harmonies": {
+      "description": "Exact hue rotations at the same saturation and lightness.",
+      "rotations": {
+        "complementary": [180],
+        "analogous": [-30, 30],
+        "triadic": [120, 240],
+        "splitComplementary": [150, 210]
+      }
+    },
+    "temperature": {
+      "description": "Rough convention only, not a verdict.",
+      "rules": [
+        "Saturation below 0.12 reads neutral.",
+        "Hue below 80 or at/above 320 reads warm.",
+        "All other hues read cool."
+      ]
+    },
+    "grounds": {
+      "description": "Darkest and lightest sampled hexes by HSL lightness, used as grounds in the Albers figure-on-ground study."
+    },
+    "whiteBalance": {
+      "description": "Optional cast correction applied during sampling only; the displayed photo is never altered. Off by default.",
+      "methods": {
+        "gray": "Gray-world: channel averages over the sampled region are equalized.",
+        "white": "White-patch: the 99.5th percentile per channel is equalized (robust to lone hot pixels).",
+        "manual": "Averages a 5x5 patch around the artist-tapped neutral point.",
+        "manual3": "Three-point calibration from tapped black/grey/white references sampled anywhere in the photo: per channel, black maps to 0, white maps to 255, and a gamma anchored on green neutralizes the grey midtone."
+      },
+      "gains": "Green anchored at 1; red and blue clamped to [0.5, 2.0] so strongly colored artwork is not forced gray.",
+      "output": "{ gains: {r, g, b}, ref: {r, g, b} } where ref is the measured neutral; null when unusable, in which case sampling proceeds uncorrected.",
+      "calibration": "computeCalibration returns { refs, offset, denom, gamma } or null. Rejected when any channel range is below 8 or grey is not strictly between black and white per channel. Gamma clamped to [0.5, 2.0]."
+    },
+    "albersStudies": [
+      "Figure-on-two-grounds built from the sampled palette.",
+      "Timed 20-second afterimage exercise flipping to #808080 gray.",
+      "Figure-plus-complement vibration pair."
+    ],
+    "limits": [
+      "Phone screens and galleries vary; never state a sampled hex as the physical paint color.",
+      "Sampling reflects the photo, not the artwork under gallery light.",
+      "Quantization merges close colors.",
+      "The app knows nothing about pigments, medium, or intent unless the artist says so."
+    ]
+  },
+  "albers": {
+    "source": "After Josef Albers, Interaction of Color (1963).",
+    "principles": [
+      "A color is almost never perceived as it physically is. Ground, neighbor, light, and size change the reading.",
+      "One physical color can be made to read as two different colors by placing it on different grounds. Conversely, two different physical colors can be made to look alike on well-chosen grounds.",
+      "Afterimage: staring at a saturated color, then looking at neutral gray, produces a ghost of roughly the complementary color. Strongest with saturated figures and a steady gaze.",
+      "Vibration: high-chroma neighbors of similar lightness shimmer along their shared boundary. Softening either color's saturation or lightness calms it.",
+      "Transparency illusion: opaque colors can be arranged to read as overlapping transparent sheets. Not yet an app study; candidate for later.",
+      "Practical rule for critique: always name the ground or neighbor a color is judged against."
+    ]
+  },
+  "ittenContrasts": {
+    "source": "After Johannes Itten, The Art of Color.",
+    "contrasts": [
+      {
+        "name": "Hue",
+        "summary": "Undiluted hues at full strength side by side. Loudest with at least three clearly separated hues."
+      },
+      {
+        "name": "Light-dark",
+        "summary": "The strongest structural contrast; carries form and depth even without hue."
+      },
+      {
+        "name": "Cold-warm",
+        "summary": "Warm hues (reds, oranges, yellows) advance and cool hues (greens, blues, violets) recede, all else equal."
+      },
+      {
+        "name": "Complementary",
+        "summary": "Opposites mixed toward gray, placed side by side at maximum mutual intensity."
+      },
+      {
+        "name": "Simultaneous",
+        "summary": "Each color pushes its neighbor toward its own complement (gray on red looks greenish). The mechanism behind most the-color-changed surprises."
+      },
+      {
+        "name": "Saturation (quality)",
+        "summary": "Pure color against the same hue dulled or grayed."
+      },
+      {
+        "name": "Extension (proportion)",
+        "summary": "The area each color covers. Small areas of intense warm color balance large areas of quiet cool color. Goethe's rough proportions (yellow 3, orange 4, red 6, green 6, blue 8, violet 9) are a starting point, not a law."
+      }
+    ]
+  },
+  "harmonySchemes": [
+    {
+      "name": "Complementary",
+      "geometry": "180 degrees apart",
+      "reading": "Maximum tension and mutual intensification."
+    },
+    {
+      "name": "Analogous",
+      "geometry": "Neighbors within about 30-60 degrees",
+      "reading": "Calm, unified passages."
+    },
+    {
+      "name": "Triadic",
+      "geometry": "120 degrees apart",
+      "reading": "Balanced tension; needs one dominant to avoid noise."
+    },
+    {
+      "name": "Split complementary",
+      "geometry": "Base plus the two neighbors of its complement",
+      "reading": "Strong but more forgiving than a direct complement."
+    },
+    {
+      "name": "Tetradic rectangle / square",
+      "geometry": "Two complementary pairs",
+      "reading": "Rich; needs a clear dominant color and deliberate proportions."
+    }
+  ],
+  "effects": [
+    {
+      "name": "Munsell dimensions",
+      "summary": "Hue (which color), value (light-dark), chroma (saturation strength). Most beginner mud comes from confusing value problems with hue problems: check value first."
+    },
+    {
+      "name": "Bezold / assimilation effect",
+      "summary": "Thin repeated marks or lines take on the character of their surroundings (spreading), working opposite to simultaneous contrast. Relevant to hatching, glazing lines, and texture."
+    },
+    {
+      "name": "Chevreul simultaneous contrast",
+      "summary": "The neighbor-shift behind simultaneous contrast, including the afterimage complement pairing."
+    },
+    {
+      "name": "Warm/cool limits",
+      "summary": "Temperature language is conventional and cultural. The app's hue-band rule is a rough sorter, not a verdict."
+    }
+  ],
+  "critiqueGuidance": [
+    "Cite measured values: sampled hexes with coverage, named grounds, named neighbors.",
+    "Prefer observations over scores: name the contrast or harmony at work, offer at most one alternative to try, and say what would change.",
+    "State uncertainty plainly: photo white balance, screen calibration, and unknown medium all limit what can be claimed.",
+    "Ask before prescribing: medium, intent, and what the artist already likes about the passage. Every suggestion stays dismissible.",
+    "Never invent palette entries, pigment names, or exact-match claims. If a needed fact is missing, ask for it or mark the comment as provisional.",
+    "When white balance was applied, cite the method and gains shown in the app, and note that correction reflects the photo's lighting, not necessarily the artwork."
+  ]
+}

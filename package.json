@@ -1,0 +1,11 @@
+{
+  "name": "artist-companion-feasibility",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Feasibility prototype. Stable technical id; the display name lives in public/branding.js and can change without affecting saved data.",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node --check lib/critique.js && node --check public/branding.js && node --check public/grid.js && node --check public/color.js && node --check public/formats.js && node --check public/rectify.js && node --check public/detect.js && node --check public/vendor/p5.min.js && node --check public/voice.js && node --check public/app.js && node --check public/overview.js && node --check tests/grid.test.js && node --check tests/color.test.js && node --check tests/formats.test.js && node --check tests/rectify.test.js && node --check tests/detect.test.js && node --check tests/critique.test.js && node --check tests/voice.test.js",
+    "test": "node tests/grid.test.js && node tests/color.test.js && node tests/formats.test.js && node tests/rectify.test.js && node tests/detect.test.js && node tests/critique.test.js && node tests/voice.test.js"
+  }
+}

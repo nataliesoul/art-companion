@@ -1,0 +1,30 @@
+{
+  "id": "chatcmpl-01a1a94a-6e48-7134-884f-d84a5e9094e0",
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "{\"aspects\": [{\"id\": \"composition\", \"reading\": \"The pot and leaves rise left of center, then the eye moves right to the two low fruits.\"}, {\"id\": \"values\", \"reading\": \"Most values stay light and muted, with the darkest pot rim contrasting the cream ground at the focal pot.\"}, {\"id\": \"color\", \"reading\": \"Warm cream and tan surround muted greens, while the small red and yellow fruits add quiet warm accents.\"}, {\"id\": \"balance\", \"reading\": \"Visual weight gathers low and left in the pot, making it focal, while the red fruit offers smaller competing pull.\"}], \"guides\": [{\"id\": \"phi-grid\", \"reason\": \"The pot rim and fruits sit near the overlay crossings shown.\"}], \"headline\": \"A quiet still life centers a green pot beside fruit.\", \"marks\": [{\"kind\": \"focal\", \"label\": \"muted green pot\", \"reason\": \"The large muted green shape draws the eye first.\", \"x\": 0.42, \"y\": 0.57}, {\"kind\": \"accent\", \"label\": \"warm red fruit\", \"reason\": \"This small warm shape pulls attention after the pot.\", \"x\": 0.65, \"y\": 0.72}, {\"kind\": \"light\", \"label\": \"pale cream ground\", \"reason\": \"The pale ground keeps the upper area feeling open.\", \"x\": 0.82, \"y\": 0.18}, {\"kind\": \"heavy\", \"label\": \"soft oval shadow\", \"reason\": \"The shadow grounds the pot and fruits on the surface.\", \"x\": 0.5, \"y\": 0.82}], \"nextSteps\": [\"Try deepening the shadow just beneath the red fruit.\", \"Try softening one edge of the pot highlight.\", \"Try adding a faint leaf shadow on the cream ground.\"], \"observations\": [\"The upper cream area is large and empty, so attention settles quickly on the lower objects.\", \"The pot highlight is a single pale curve, leaving most of the pot surface flat.\", \"The red and yellow fruits overlap slightly, which helps them read as one small group.\"], \"palette\": {\"anchorHex\": \"#657d72\", \"reason\": \"Analogous neighbors would keep the pot and leaves calm and unified.\", \"scheme\": \"analogous\"}, \"strengths\": [\"Clear simple shapes read easily from a distance.\", \"The muted green pot contrasts gently with the warm ground.\", \"Small warm fruits add life without overwhelming the calm arrangement.\"], \"summary\": \"A muted green pot with leaves sits left of center on a tan surface. Two round fruits rest beside it against a cream ground. The shapes are simple and the mood feels calm and spare.\", \"uncertainty\": \"Photo lighting and screen differences may shift these colors, and your intent is unknown.\"}",
+        "refusal": null,
+        "role": "assistant"
+      },
+      "logprobs": null
+    }
+  ],
+  "created": 1793841589,
+  "model": "muse-wonder-1.0",
+  "service_tier": "default",
+  "object": "chat.completion",
+  "usage": {
+    "completion_tokens": 5780,
+    "prompt_tokens": 1543,
+    "total_tokens": 7323,
+    "completion_tokens_details": {
+      "reasoning_tokens": 5175
+    },
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    }
+  }
+}

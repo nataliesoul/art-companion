@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Composition guides and thoughtful feedback for physical art.">
+  <title>Artist Companion</title>
+  <meta name="theme-color" content="#fffaf6">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="studio.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1 id="app-name">Artist Companion</h1>
+    <p id="app-description">Composition guides and thoughtful feedback for physical art.</p>
+    <div class="voice-bar">
+      <button id="voice-toggle" type="button" class="secondary" aria-pressed="false">Voice control: off</button>
+      <span id="voice-heard" class="hint" role="status"></span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <div class="workspace">
+    <section class="panel" aria-labelledby="photo-heading">
+      <h2 id="photo-heading">1. Artwork photo</h2>
+      <p class="hint">Choose a photo of one flat rectangular artwork. Your original stays untouched; guides draw on top only.</p>
+      <div class="row">
+        <label class="file-button" for="file-input">Upload photo</label>
+        <input id="file-input" type="file" accept="image/*" class="visually-hidden">
+        <button id="camera-button" type="button">Use camera</button>
+        <button id="sample-artwork-button" type="button" class="secondary">Try a sample</button>
+      </div>
+      <p id="photo-status" class="status" role="status"></p>
+
+      <div id="camera-wrap" class="camera-wrap" hidden>
+        <div class="row camera-actions">
+          <button id="capture-button" type="button"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h4l2-3h4l2 3h4a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/><circle cx="12" cy="13" r="4"/></svg>Capture still</button>
+          <button id="camera-cancel" type="button" class="secondary">Cancel</button>
+        </div>
+        <video id="camera-preview" playsinline muted autoplay aria-label="Live camera preview"></video>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="corners-heading">
+      <h2 id="corners-heading">2. Mark the four corners</h2>
+      <p id="corner-hint" class="hint">Add a photo first, then tap its four corners in any order.</p>
+      <div class="stage-wrap">
+        <div id="stage" class="frame" hidden>
+          <img id="artwork" alt="Your artwork photo with an adjustable composition guide overlay">
+          <svg id="overlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <polygon id="quad" points="" vector-effect="non-scaling-stroke"></polygon>
+            <g id="grid" vector-effect="non-scaling-stroke"></g>
+          </svg>
+          <div id="handles"></div>
+          <div id="neutral-layer"></div>
+        </div>
+      </div>
+      <div class="row">
+        <button id="detect-button" type="button">Detect corners</button>
+        <button id="undo-button" type="button" class="secondary" disabled>Undo corner</button>
+        <button id="reset-button" type="button" class="secondary" disabled>Reset corners</button>
+      </div>
+      <p id="detect-status" class="status" role="status"></p>
+    </section>
+
+    </div>
+    <div class="sidebar">
+    <section class="panel" aria-labelledby="overview-heading">
+      <h2 id="overview-heading">AI overview</h2>
+      <p class="hint">One automatic read of the whole artwork: composition, values, color, balance, marks on the image, and what to try next. It runs once your corners are set, if you allow it, and sends the rectified artwork with your palette, medium and intent to the AI service.</p>
+      <div id="overview-consent" class="study-card overview-consent" hidden>
+        <h3>Analyze automatically?</h3>
+        <p class="hint">Each time your corners are set, two small images of the marked artwork plus your palette, medium and intent go to the AI service. You can change this any time below.</p>
+        <div class="row">
+          <button id="overview-consent-yes" type="button">Yes, analyze automatically</button>
+          <button id="overview-consent-no" type="button" class="secondary">Only when I ask</button>
+        </div>
+      </div>
+      <div class="row format-row overview-controls">
+        <button id="overview-run" type="button">Analyze now</button>
+        <button id="overview-read" type="button" class="secondary">Read aloud</button>
+      </div>
+      <div class="row format-row overview-prefs">
+        <label class="pref"><input id="overview-auto" type="checkbox"> Analyze automatically</label>
+        <label class="pref"><input id="overview-speak" type="checkbox"> Speak the summary when ready</label>
+      </div>
+      <p id="overview-status" class="status" role="status"></p>
+      <div id="overview-report" hidden></div>
+      <div id="overview-setup" class="study-card" hidden>
+        <h3>AI not configured</h3>
+        <p class="hint">The overview needs a Meta Model API key on the server. Nothing was analyzed and no feedback was invented.</p>
+        <ol id="overview-setup-steps"></ol>
+        <p class="hint">Never paste a key into chat. See docs/ai-setup.md for details.</p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="critique-heading">
+      <h2 id="critique-heading">3. AI critique (on request)</h2>
+      <p class="hint">Optional. Rectifies your marked artwork and asks the model for feedback grounded in your guides and palette. Nothing leaves this device until you press Analyze.</p>
+      <label for="intent-input">Your intent (optional)</label>
+      <textarea id="intent-input" maxlength="500" rows="2" placeholder="What are you aiming for?"></textarea>
+      <div class="row format-row">
+        <button id="dictate-button" type="button" class="secondary">Dictate</button>
+      </div>
+      <p id="dictate-status" class="status" role="status"></p>
+      <details id="voice-commands">
+        <summary>What can I say?</summary>
+        <ul>
+          <li>"Suggest a guide", "Analyze", "Sample palette"</li>
+          <li>"Next guide", "Previous guide"</li>
+          <li>"Read feedback", "Chat", "Generate a version", "Help", "Stop"</li>
+        </ul>
+        <p class="hint">Voice input uses your browser's transcription service (Apple or Google servers). Read-aloud uses on-device voices.</p>
+      </details>
+      <div class="row format-row">
+        <label for="medium-select">Medium</label>
+        <select id="medium-select">
+          <option>Oil</option>
+          <option>Acrylic</option>
+          <option>Watercolor</option>
+          <option>Gouache</option>
+          <option>Tempera</option>
+          <option>Pastel</option>
+          <option>Charcoal</option>
+          <option>Graphite</option>
+          <option>Ink</option>
+          <option>Colored pencil</option>
+          <option>Collage</option>
+          <option>Mixed media</option>
+          <option>Other</option>
+        </select>
+        <label for="topic-select">Topic</label>
+        <select id="topic-select">
+          <option>Composition</option>
+          <option>Values (light/dark)</option>
+          <option>Color</option>
+          <option>Balance and emphasis</option>
+          <option>Overall impression</option>
+        </select>
+      </div>
+      <div class="row format-row">
+        <button id="analyze-button" type="button">Analyze artwork</button>
+      </div>
+      <p id="critique-status" class="status" role="status"></p>
+      <div id="critique-previews" class="ground-demo" hidden>
+        <figure class="preview-fig">
+          <img id="rect-preview" alt="Rectified artwork sent for analysis">
+          <figcaption>Rectified</figcaption>
+        </figure>
+        <figure class="preview-fig">
+          <img id="overlay-preview" alt="Rectified artwork with the selected guide overlay">
+          <figcaption>With guide</figcaption>
+        </figure>
+      </div>
+      <p id="critique-context" class="hint" hidden></p>
+      <div id="critique-result" hidden>
+        <div class="row format-row">
+          <button id="read-button" type="button" class="secondary">Read aloud</button>
+        </div>
+        <h3>Strengths</h3>
+        <ul id="critique-strengths"></ul>
+        <h3>Observations</h3>
+        <ul id="critique-observations"></ul>
+        <div id="critique-next-wrap" hidden>
+          <h3>Possible next steps</h3>
+          <ul id="critique-next"></ul>
+        </div>
+        <h3>Uncertainty</h3>
+        <p id="critique-uncertainty" class="hint"></p>
+      </div>
+      <div id="critique-setup" class="study-card" hidden>
+        <h3>AI not configured</h3>
+        <p class="hint">Analysis needs a Meta Model API key on the server. The previews above show exactly what would be sent. No feedback was generated.</p>
+        <ol id="critique-setup-steps"></ol>
+        <p class="hint">Never paste a key into chat. See docs/ai-setup.md for details.</p>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="direction-heading">
+      <h2 id="direction-heading">4. AI art direction (on request)</h2>
+      <p class="hint">Optional. One request returns recommended guides, a palette to try, a computed preview, and the model's reasons. Nothing leaves this device until you press the button. Your photo is never altered.</p>
+      <div class="row format-row">
+        <button id="direction-button" type="button">Suggest art direction</button>
+      </div>
+      <p id="direction-status" class="status" role="status"></p>
+      <div id="direction-result" hidden>
+        <h3>Recommended guides</h3>
+        <div id="direction-guides"></div>
+        <h3>Palette to try</h3>
+        <p id="direction-palette-reason" class="hint"></p>
+        <div id="direction-swatches" class="swatches"></div>
+        <h3>Why this direction</h3>
+        <p id="direction-summary"></p>
+        <h3>Uncertainty</h3>
+        <p id="direction-uncertainty" class="hint"></p>
+        <h3>Suggestion preview</h3>
+        <p class="hint">Computed on this device from the AI's picks: a hue study plus the first recommended guide. Not AI imagery; your photo is unchanged.</p>
+        <figure class="preview-fig">
+          <canvas id="direction-canvas"></canvas>
+          <figcaption id="direction-caption"></figcaption>
+        </figure>
+        <label id="direction-strength-label" for="direction-strength">Preview strength: <output id="direction-strength-value" for="direction-strength">60%</output></label>
+        <input id="direction-strength" type="range" min="0" max="100" value="60">
+        <div class="row format-row">
+          <input id="direction-guide-toggle" type="checkbox" checked>
+          <label for="direction-guide-toggle">Show recommended guide overlay</label>
+        </div>
+        <h3>Generated study</h3>
+        <p class="hint">Optional. Sends the rectified artwork plus this direction to the image model and paints one study below. Your photo is never altered.</p>
+        <div class="row format-row">
+          <button id="generate-button" type="button">Generate a version</button>
+        </div>
+        <p id="generate-status" class="status" role="status"></p>
+        <div id="generate-result" hidden>
+          <figure class="preview-fig">
+            <img id="generate-img" alt="AI-generated study of your artwork">
+            <figcaption>AI study from your art direction — original untouched.</figcaption>
+          </figure>
+          <h3>Why this version</h3>
+          <p id="generate-why"></p>
+          <p id="generate-revised" class="hint" hidden></p>
+          <details>
+            <summary>What was asked</summary>
+            <p id="generate-prompt" class="hint"></p>
+          </details>
+          <div class="row format-row">
+            <button id="generate-dismiss" type="button" class="secondary">Dismiss</button>
+          </div>
+        </div>
+        <div class="row format-row">
+          <button id="direction-dismiss" type="button" class="secondary">Dismiss</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="chat-heading">
+      <h2 id="chat-heading">5. Voice conversation (on request)</h2>
+      <p class="hint">Optional. Talk with the AI about your marked artwork: tap Talk, speak, and hear the reply. Each turn sends the rectified artwork plus recent turns; transcription uses your browser vendor's servers, replies are spoken on-device. The conversation is not saved.</p>
+      <div class="row format-row">
+        <button id="chat-talk" type="button">Talk</button>
+        <button id="chat-stop" type="button" class="secondary">Stop</button>
+      </div>
+      <p id="chat-status" class="status" role="status"></p>
+      <ol id="chat-log" class="chat-log" hidden></ol>
+      <div class="row format-row">
+        <input id="chat-speak-toggle" type="checkbox" checked>
+        <label for="chat-speak-toggle">Speak replies aloud</label>
+      </div>
+      <div class="row format-row">
+        <label for="chat-input">Or type</label>
+        <input id="chat-input" type="text" maxlength="500" autocomplete="off" placeholder="Ask about your artwork…">
+        <button id="chat-send" type="button" class="secondary">Send</button>
+      </div>
+      <div class="row format-row">
+        <button id="chat-clear" type="button" class="secondary">Clear conversation</button>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="format-heading">
+      <h2 id="format-heading">6. Artwork format (optional)</h2>
+      <p class="hint">If you know the paper or canvas size, guides use its true proportions instead of measuring your photo's tilted corners.</p>
+      <label for="format-select">Format</label>
+      <select id="format-select"></select>
+      <div class="row format-row">
+        <label for="orientation-select">Orientation</label>
+        <select id="orientation-select">
+          <option value="portrait">Portrait</option>
+          <option value="landscape">Landscape</option>
+        </select>
+      </div>
+      <div id="custom-dims" class="row format-row" hidden>
+        <label for="custom-w">Width</label>
+        <input id="custom-w" type="number" min="0" step="any" inputmode="decimal" autocomplete="off">
+        <label for="custom-h">Height</label>
+        <input id="custom-h" type="number" min="0" step="any" inputmode="decimal" autocomplete="off">
+        <label for="custom-unit">Unit</label>
+        <select id="custom-unit">
+          <option value="cm">cm</option>
+          <option value="in">in</option>
+        </select>
+      </div>
+      <div class="row format-row">
+        <input id="use-image-size" type="checkbox">
+        <label for="use-image-size">Use image size (photo pixels; best when the photo tightly frames the artwork)</label>
+      </div>
+      <p id="aspect-status" class="status" role="status"></p>
+    </section>
+
+    <section class="panel" aria-labelledby="guide-heading">
+      <h2 id="guide-heading">7. Composition guide</h2>
+      <p class="hint">Auto picks the overlay once all four corners are marked; choose any guide to take over. Drag a corner to adjust it; use arrow keys on a selected corner for fine moves.</p>
+      <label for="guide-select">Guide</label>
+      <select id="guide-select"></select>
+      <p id="guide-blurb" class="hint"></p>
+      <p id="auto-status" class="status" role="status"></p>
+      <div class="row format-row">
+        <button id="suggest-button" type="button" class="secondary">Suggest a guide</button>
+      </div>
+      <p id="suggest-status" class="status" role="status"></p>
+      <div id="suggestions"></div>
+      <label for="opacity-slider">Guide opacity: <output id="opacity-value" for="opacity-slider">80%</output></label>
+      <input id="opacity-slider" type="range" min="0" max="100" value="80">
+    </section>
+
+    <section class="panel" aria-labelledby="color-heading">
+      <h2 id="color-heading">8. Color theory</h2>
+      <p class="hint">Sample the photo's dominant colors, then pick one to see its computed harmonies. Sampling stays inside your marked corners when set.</p>
+      <div class="row format-row">
+        <label for="wb-method">White balance</label>
+        <select id="wb-method">
+          <option value="off">Off — sample as-is</option>
+          <option value="gray">Auto — gray world</option>
+          <option value="white">Auto — white patch</option>
+          <option value="manual">Manual — 1 neutral point</option>
+          <option value="manual3">Manual — black, grey, white</option>
+        </select>
+        <button id="pick-neutral" type="button" class="secondary" hidden>Pick neutral point</button>
+      </div>
+      <div id="pick-cal" class="row format-row" hidden>
+        <button id="pick-black" type="button" class="secondary" aria-pressed="false">Black</button>
+        <button id="pick-grey" type="button" class="secondary" aria-pressed="false">Grey</button>
+        <button id="pick-white" type="button" class="secondary" aria-pressed="false">White</button>
+      </div>
+      <p id="wb-status" class="status" role="status"></p>
+      <p id="wb-gains" class="hint" hidden></p>
+      <div id="wb-chips" class="harmony-row" hidden></div>
+      <div class="row">
+        <button id="sample-button" type="button">Sample palette</button>
+      </div>
+      <p id="color-status" class="status" role="status"></p>
+      <div id="palette" class="swatches" hidden></div>
+      <div id="harmonies" hidden>
+        <h3>Harmonies of <span id="harmony-base"></span></h3>
+        <p id="harmony-temp" class="hint"></p>
+        <div id="harmony-groups"></div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="albers-heading">
+      <h2 id="albers-heading">9. Albers color studies</h2>
+      <p class="hint">Studies after Josef Albers, Interaction of Color (1963). Descriptions below are original. Screens vary, so treat these as studies, not proofs.</p>
+      <div class="study-grid">
+        <div class="study-card">
+          <h3>Same color, different readings</h3>
+          <div class="ground-demo">
+            <div class="ground" style="background-color: #141414;"><span class="figure" style="background-color: #8a8a8a;"></span></div>
+            <div class="ground" style="background-color: #f0f0f0;"><span class="figure" style="background-color: #8a8a8a;"></span></div>
+          </div>
+          <p class="hint">Both centers are pixel-identical #8a8a8a; the grounds change how each reads. A color is never seen alone.</p>
+        </div>
+        <div class="study-card">
+          <h3>Afterimage</h3>
+          <p class="hint">Stare at a saturated color for about 20 seconds, then look at a neutral gray: a ghost of the complementary color appears. The interactive study below times this for you.</p>
+        </div>
+        <div class="study-card">
+          <h3>Vibration</h3>
+          <div class="vibrate-demo" aria-hidden="true">
+            <span style="background-color: #e60000;"></span><span style="background-color: #00a000;"></span><span style="background-color: #e60000;"></span><span style="background-color: #00a000;"></span>
+          </div>
+          <p class="hint">High-chroma neighbors of similar lightness shimmer at their boundary. Try it with your own colors below.</p>
+        </div>
+      </div>
+      <div id="albers-studies" hidden>
+        <h3>Studies from your palette</h3>
+        <p id="albers-note" class="hint"></p>
+        <div class="ground-demo">
+          <div class="ground" id="ground-dark"><span class="figure" id="figure-dark"></span></div>
+          <div class="ground" id="ground-light"><span class="figure" id="figure-light"></span></div>
+        </div>
+        <p id="albers-labels" class="hint"></p>
+        <div class="study-card">
+          <h3>Afterimage timer</h3>
+          <p class="hint">Stare at the dot while the color shows, then keep looking when it turns gray.</p>
+          <div class="row">
+            <button id="afterimage-start" type="button">Start 20-second stare</button>
+            <button id="afterimage-stop" type="button" class="secondary" disabled>Stop</button>
+          </div>
+          <p id="afterimage-status" class="status" role="status"></p>
+          <div id="afterimage-field" class="afterimage" hidden><span class="fixation" aria-hidden="true"></span></div>
+        </div>
+        <div class="study-card">
+          <h3>Vibration pair</h3>
+          <div class="vibrate-demo" id="vibrate-pair" aria-hidden="true"></div>
+          <p id="vibrate-labels" class="hint"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" aria-labelledby="annotate-heading">
+      <h2 id="annotate-heading">10. Suggested changes (on request)</h2>
+      <p class="hint">Optional. The AI places balance and focal marks on your marked artwork: tap Suggest changes, then tap any mark for its reason. Nothing leaves this device until you press the button.</p>
+      <div class="row format-row">
+        <button id="annotate-button" type="button">Suggest changes</button>
+      </div>
+      <p id="annotate-status" class="status" role="status"></p>
+      <div id="annotate-result" hidden>
+        <figure class="preview-fig">
+          <div id="annotate-sketch"></div>
+          <figcaption>Marks for the artwork as marked when suggested — re-run after changing corners. Tap a mark for its reason.</figcaption>
+        </figure>
+        <p id="annotate-focus" class="status" role="status"></p>
+        <div class="row format-row">
+          <input id="annotate-overlay" type="checkbox" checked>
+          <label for="annotate-overlay">Show marks overlay</label>
+        </div>
+        <h3>Marks</h3>
+        <ol id="annotate-list" class="chat-log"></ol>
+        <h3>Overall direction</h3>
+        <p id="annotate-summary"></p>
+        <div class="row format-row">
+          <button id="annotate-dismiss" type="button" class="secondary">Dismiss</button>
+        </div>
+      </div>
+    </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>Feasibility prototype. Photos stay on this device until you press an AI button; there is no account and no sync.</p>
+  </footer>
+
+  <script src="branding.js"></script>
+  <script src="grid.js"></script>
+  <script src="color.js"></script>
+  <script src="formats.js"></script>
+  <script src="rectify.js"></script>
+  <script src="detect.js"></script>
+  <script src="voice.js"></script>
+  <script src="vendor/p5.min.js"></script>
+  <script src="app.js"></script>
+  <script src="overview.js"></script>
+  <script src="studio.js"></script>
+</body>
+</html>

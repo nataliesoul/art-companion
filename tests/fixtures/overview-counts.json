@@ -1,0 +1,94 @@
+{
+  "before": {
+    "model": "muse-wonder-1.0",
+    "ms": 33862,
+    "http": 200,
+    "finish": "stop",
+    "corners": "detect",
+    "aspect": 1.3223,
+    "raw": {
+      "hex": 0,
+      "pct": 0,
+      "sentenceWords": [
+        20,
+        23,
+        13,
+        33,
+        19,
+        26,
+        27,
+        25,
+        25,
+        31,
+        28
+      ],
+      "guides": 1,
+      "questionSteps": 0,
+      "aspects": 4,
+      "marks": 5
+    },
+    "netted": {
+      "hex": 0,
+      "pct": 0,
+      "sentenceWords": [
+        20,
+        23,
+        13,
+        33,
+        19,
+        26,
+        27,
+        25,
+        25,
+        31,
+        28
+      ],
+      "guides": 0,
+      "questionSteps": 0,
+      "aspects": 4,
+      "marks": 5
+    }
+  },
+  "after": {
+    "model": "muse-wonder-1.0",
+    "ms": 37239,
+    "http": 200,
+    "finish": "stop",
+    "corners": "detect",
+    "aspect": 1.3223,
+    "raw": {
+      "hex": 0,
+      "pct": 0,
+      "sentenceWords": [
+        14,
+        10,
+        11,
+        18,
+        19,
+        18,
+        20
+      ],
+      "guides": 1,
+      "questionSteps": 0,
+      "aspects": 4,
+      "marks": 4
+    },
+    "netted": {
+      "hex": 0,
+      "pct": 0,
+      "sentenceWords": [
+        14,
+        10,
+        11,
+        18,
+        19,
+        18,
+        20
+      ],
+      "guides": 1,
+      "questionSteps": 0,
+      "aspects": 4,
+      "marks": 4
+    }
+  }
+}
