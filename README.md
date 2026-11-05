@@ -66,7 +66,7 @@ invented, and truncated or unparseable replies surface as honest errors.
 ## Muse product use
 
 - **Muse Code** is the development assistant used to build this project
-  (see `PROJECT-PLAN.md`). Runtime model access is a
+  Runtime model access is a
   separate setup step: installing or signing into Muse Code does not
   establish it; the server needs its own `MODEL_API_KEY`.
 - **Meta Model API** powers every AI feature at runtime through one
@@ -111,9 +111,8 @@ invented, and truncated or unparseable replies surface as honest errors.
   `studio.js`, `branding.js`, `styles.css`, `studio.css`, and vendored
   `vendor/p5.min.js` (offline overlay rendering).
 - `tests/` — Dependency-free Node suites, one per module.
-- `docs/` — `ai-setup.md` (key setup), `color-theory.json` (model
-  reference digest).
-- `TESTING.md` — Manual checks incl. iPhone/iPad/Windows steps.
+- `docs/color-theory.json` — Color reference digest attached to model
+  prompts.
 - Test photos of real artwork are kept out of the repository; use
   `public/sample-artwork.svg` or your own photos locally.
 
@@ -122,7 +121,7 @@ invented, and truncated or unparseable replies surface as honest errors.
 Requirements: Node.js. No packages to install.
 
 1. `cp .env.example .env` (Windows: copy it) and set `MODEL_API_KEY`
-   from the Meta Model API dashboard (see `docs/ai-setup.md`). Without
+   from the Meta Model API dashboard. Never commit it. Without
    a key the app runs fully offline; AI buttons show setup steps and
    invent nothing.
 2. `node server.js` (or `npm start`).
@@ -132,7 +131,9 @@ Requirements: Node.js. No packages to install.
 
 Optional: `MODEL_API_BASE`, `MODEL_API_MODEL`, `MODEL_IMAGE_MODEL`,
 `HOST`, `PORT` (e.g. `PORT=8099 node server.js`). Camera capture on
-phones needs HTTPS outside loopback — see `TESTING.md`.
+phones needs HTTPS outside loopback (for example a Cloudflare tunnel
+to the local server), because iOS only exposes the camera to secure
+contexts.
 
 ## Testing
 
@@ -140,8 +141,6 @@ phones needs HTTPS outside loopback — see `TESTING.md`.
   detection incl. angled/perspective/textured cases, critique builders,
   voice commands).
 - `npm run check` — syntax-check every shipped JS file.
-- `TESTING.md` — 19 manual steps plus iPhone Safari, iPad, and Windows
-  layout checks.
 
 ## Privacy principles
 
@@ -160,4 +159,4 @@ Working prototype: all ten sections, the automatic overview, studio
 view, and the generated study run against the live API. Outstanding:
 on-device photo checks on the owner's wall painting (iPhone first, then
 iPad/Windows layouts), early Quest browser feasibility per the plan,
-and a final product rename. See `PROJECT-PLAN.md` and `TESTING.md`.
+and a final product rename.

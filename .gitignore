@@ -8,9 +8,11 @@ dist/
 .env.*
 !.env.example
 
-# Local assistant briefs and tooling (not part of the app)
-*-PROMPT.md
-AGENTS.md
+# Local assistant briefs, plans and notes (not part of the app).
+# Only README.md and the vendored-library attribution note are published.
+*.md
+!README.md
+!public/vendor/README.md
 .claude/
 Start-Muse.cmd
 
