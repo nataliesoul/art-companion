@@ -1,5 +1,7 @@
 # Artist Companion (working title)
 
+*Claude used to push to the repo
+
 Composition guides and thoughtful feedback for physical art.
 
 Artist Companion is a mobile-first web app that helps artists working in
